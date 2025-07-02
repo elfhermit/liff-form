@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>飲料記錄 - 個人客製化點飲料系統</title>
+    <title>飲料記錄</title>
     <script src="https://static.line-scdn.net/liff/edge/2/liff.js"></script>
     <style>
         * {
@@ -11,51 +11,55 @@
             padding: 0;
             box-sizing: border-box;
         }
-
+        
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-            background: linear-gradient(135deg, #06c755 0%, #00b900 100%);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
             padding: 20px;
         }
-
+        
         .container {
-            max-width: 480px;
+            max-width: 400px;
             margin: 0 auto;
-        }
-
-        .form-container {
             background: white;
             border-radius: 20px;
             padding: 30px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-            margin-bottom: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            animation: slideUp 0.5s ease-out;
         }
-
+        
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
         .header {
             text-align: center;
             margin-bottom: 30px;
         }
-
+        
         .header h1 {
-            color: #06c755;
+            color: #333;
             font-size: 24px;
-            margin-bottom: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
+            margin-bottom: 8px;
         }
-
+        
         .header p {
             color: #666;
             font-size: 14px;
         }
-
+        
         .form-group {
             margin-bottom: 20px;
         }
-
+        
         .form-group label {
             display: block;
             margin-bottom: 8px;
@@ -63,111 +67,68 @@
             color: #333;
             font-size: 14px;
         }
-
+        
         .required {
-            color: #ff4757;
+            color: #e74c3c;
         }
-
+        
         input, select, textarea {
             width: 100%;
-            padding: 12px 16px;
-            border: 2px solid #e1e8ed;
+            padding: 15px;
+            border: 2px solid #e9ecef;
             border-radius: 12px;
             font-size: 16px;
             transition: all 0.3s ease;
-            background: #fafafa;
+            background-color: #f8f9fa;
         }
-
+        
         input:focus, select:focus, textarea:focus {
             outline: none;
-            border-color: #06c755;
-            background: white;
-            box-shadow: 0 0 0 3px rgba(6, 199, 85, 0.1);
+            border-color: #667eea;
+            background-color: white;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
         }
-
-        .input-icon {
-            position: relative;
-        }
-
-        .input-icon input {
-            padding-left: 45px;
-        }
-
-        .input-icon::before {
-            content: attr(data-icon);
-            position: absolute;
-            left: 16px;
-            top: 50%;
-            transform: translateY(-50%);
-            font-size: 16px;
-            color: #06c755;
-            z-index: 1;
-        }
-
+        
         .rating-container {
-            margin-bottom: 20px;
+            margin: 20px 0;
         }
-
+        
         .rating-stars {
             display: flex;
-            gap: 8px;
             justify-content: center;
+            gap: 10px;
             margin: 15px 0;
         }
-
+        
         .star {
-            font-size: 32px;
-            cursor: pointer;
+            font-size: 30px;
             color: #ddd;
+            cursor: pointer;
             transition: all 0.2s ease;
             user-select: none;
         }
-
+        
         .star:hover,
         .star.active {
             color: #ffd700;
             transform: scale(1.1);
         }
-
+        
+        .star.active {
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+        }
+        
         .rating-text {
             text-align: center;
             font-size: 14px;
             color: #666;
             margin-top: 10px;
         }
-
-        .sugar-options {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
-            gap: 10px;
-            margin-top: 10px;
-        }
-
-        .sugar-option {
-            padding: 10px;
-            border: 2px solid #e1e8ed;
-            border-radius: 10px;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            background: #fafafa;
-            font-size: 14px;
-        }
-
-        .sugar-option:hover {
-            border-color: #06c755;
-        }
-
-        .sugar-option.selected {
-            border-color: #06c755;
-            background: #06c755;
-            color: white;
-        }
-
+        
         .submit-btn {
-            background: linear-gradient(135deg, #06c755 0%, #00b900 100%);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
-            padding: 16px 30px;
+            padding: 18px 30px;
             border: none;
             border-radius: 12px;
             font-size: 16px;
@@ -176,115 +137,118 @@
             width: 100%;
             margin-top: 20px;
             transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(6, 199, 85, 0.3);
+            position: relative;
+            overflow: hidden;
         }
-
-        .submit-btn:hover:not(:disabled) {
+        
+        .submit-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(6, 199, 85, 0.4);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
         }
-
+        
+        .submit-btn:active {
+            transform: translateY(0);
+        }
+        
         .submit-btn:disabled {
-            opacity: 0.6;
+            background: #ccc;
             cursor: not-allowed;
             transform: none;
             box-shadow: none;
         }
-
+        
         .loading {
             display: none;
-            text-align: center;
-            padding: 20px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
         }
-
-        .loading.show {
-            display: block;
-        }
-
-        .spinner {
-            width: 40px;
-            height: 40px;
-            border: 4px solid #f3f3f3;
-            border-top: 4px solid #06c755;
+        
+        .loading::after {
+            content: '';
+            width: 20px;
+            height: 20px;
+            border: 2px solid transparent;
+            border-top: 2px solid white;
             border-radius: 50%;
             animation: spin 1s linear infinite;
-            margin: 0 auto 15px;
         }
-
+        
         @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+            to {
+                transform: rotate(360deg);
+            }
         }
-
+        
         .error-message {
-            background: #ffe6e6;
-            color: #d63031;
+            background: #fee;
+            color: #c33;
             padding: 12px;
             border-radius: 8px;
-            margin-bottom: 20px;
-            border-left: 4px solid #d63031;
+            margin: 10px 0;
             display: none;
+            font-size: 14px;
         }
-
+        
         .success-message {
-            background: #e8f5e8;
-            color: #00b894;
+            background: #efe;
+            color: #363;
             padding: 12px;
             border-radius: 8px;
-            margin-bottom: 20px;
-            border-left: 4px solid #00b894;
+            margin: 10px 0;
             display: none;
+            font-size: 14px;
         }
-
-        .quick-select {
+        
+        .price-input-group {
+            position: relative;
+        }
+        
+        .price-prefix {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #666;
+            font-weight: 600;
+        }
+        
+        .price-input {
+            padding-left: 35px;
+        }
+        
+        .sugar-options {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
-            gap: 8px;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
             margin-top: 10px;
         }
-
-        .quick-btn {
-            padding: 8px 12px;
-            border: 1px solid #ddd;
+        
+        .sugar-option {
+            padding: 12px;
+            border: 2px solid #e9ecef;
             border-radius: 8px;
-            background: white;
-            cursor: pointer;
             text-align: center;
-            font-size: 12px;
-            transition: all 0.2s ease;
-        }
-
-        .quick-btn:hover {
-            border-color: #06c755;
-            background: #f0f8f0;
-        }
-
-        .form-tips {
+            cursor: pointer;
+            transition: all 0.3s ease;
             background: #f8f9fa;
-            padding: 15px;
-            border-radius: 10px;
-            margin-bottom: 20px;
-            border-left: 4px solid #06c755;
         }
-
-        .form-tips h3 {
-            color: #06c755;
-            font-size: 14px;
-            margin-bottom: 8px;
+        
+        .sugar-option:hover {
+            border-color: #667eea;
+            background: white;
         }
-
-        .form-tips ul {
-            font-size: 12px;
-            color: #666;
-            margin-left: 15px;
+        
+        .sugar-option.selected {
+            border-color: #667eea;
+            background: #667eea;
+            color: white;
         }
-
+        
         @media (max-width: 480px) {
-            body {
-                padding: 10px;
-            }
-            
-            .form-container {
+            .container {
+                margin: 10px;
                 padding: 20px;
             }
             
@@ -296,85 +260,51 @@
 </head>
 <body>
     <div class="container">
-        <!-- 載入畫面 -->
-        <div class="loading" id="initialLoading">
-            <div class="spinner"></div>
-            <p>初始化中...</p>
+        <div class="header">
+            <h1>記錄新的飲料 🥤</h1>
+            <p>分享您的飲料體驗，讓推薦更精準</p>
         </div>
-
-        <!-- 主要表單 -->
-        <div class="form-container" id="mainForm" style="display: none;">
-            <div class="header">
-                <h1><span>🥤</span>記錄新的飲料</h1>
-                <p>建立您的專屬口味記錄</p>
+        
+        <div class="error-message" id="errorMessage"></div>
+        <div class="success-message" id="successMessage"></div>
+        
+        <form id="drinkForm">
+            <div class="form-group">
+                <label for="shopName">店名 <span class="required">*</span></label>
+                <input type="text" id="shopName" name="shopName" required 
+                       placeholder="例如：萬波、迷客夏、50嵐">
             </div>
-
-            <!-- 錯誤訊息 -->
-            <div class="error-message" id="errorMessage"></div>
             
-            <!-- 成功訊息 -->
-            <div class="success-message" id="successMessage"></div>
-
-            <!-- 小提示 -->
-            <div class="form-tips">
-                <h3>💡 記錄小提示</h3>
-                <ul>
-                    <li>詳細記錄有助於更精準的推薦</li>
-                    <li>可以在備註中寫下特殊需求</li>
-                    <li>評分會影響未來的推薦順序</li>
-                </ul>
+            <div class="form-group">
+                <label for="drinkName">飲品名稱 <span class="required">*</span></label>
+                <input type="text" id="drinkName" name="drinkName" required 
+                       placeholder="例如：蘭葉那堤、珍珠奶茶">
             </div>
-
-            <form id="drinkForm">
-                <!-- 店名 -->
-                <div class="form-group">
-                    <label for="shopName">店名 <span class="required">*</span></label>
-                    <div class="input-icon" data-icon="🏪">
-                        <input type="text" id="shopName" name="shopName" required 
-                               placeholder="例如：萬波、迷客夏、50嵐">
-                    </div>
-                    <div class="quick-select">
-                        <div class="quick-btn" onclick="setShopName('萬波')">萬波</div>
-                        <div class="quick-btn" onclick="setShopName('迷客夏')">迷客夏</div>
-                        <div class="quick-btn" onclick="setShopName('50嵐')">50嵐</div>
-                        <div class="quick-btn" onclick="setShopName('coco')">COCO</div>
-                    </div>
+            
+            <div class="form-group">
+                <label>糖度 <span class="required">*</span></label>
+                <div class="sugar-options">
+                    <div class="sugar-option" data-value="無糖">無糖</div>
+                    <div class="sugar-option" data-value="微糖">微糖</div>
+                    <div class="sugar-option" data-value="半糖">半糖</div>
+                    <div class="sugar-option" data-value="少糖">少糖</div>
+                    <div class="sugar-option" data-value="正常糖">正常糖</div>
                 </div>
-
-                <!-- 飲品名稱 -->
-                <div class="form-group">
-                    <label for="drinkName">飲品名稱 <span class="required">*</span></label>
-                    <div class="input-icon" data-icon="🧋">
-                        <input type="text" id="drinkName" name="drinkName" required 
-                               placeholder="例如：蘭葉那堤、珍珠奶茶">
-                    </div>
+                <input type="hidden" id="sugar" name="sugar" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="price">價格 <span class="required">*</span></label>
+                <div class="price-input-group">
+                    <span class="price-prefix">$</span>
+                    <input type="number" id="price" name="price" required min="0" max="1000"
+                           class="price-input" placeholder="45">
                 </div>
-
-                <!-- 糖度選擇 -->
-                <div class="form-group">
-                    <label>糖度 <span class="required">*</span></label>
-                    <div class="sugar-options">
-                        <div class="sugar-option" data-sugar="無糖">無糖</div>
-                        <div class="sugar-option" data-sugar="微糖">微糖</div>
-                        <div class="sugar-option" data-sugar="半糖">半糖</div>
-                        <div class="sugar-option" data-sugar="少糖">少糖</div>
-                        <div class="sugar-option" data-sugar="正常糖">正常糖</div>
-                    </div>
-                    <input type="hidden" id="sugar" name="sugar" required>
-                </div>
-
-                <!-- 價格 -->
-                <div class="form-group">
-                    <label for="price">價格 <span class="required">*</span></label>
-                    <div class="input-icon" data-icon="💰">
-                        <input type="number" id="price" name="price" required min="0" max="999"
-                               placeholder="例如：45">
-                    </div>
-                </div>
-
-                <!-- 推薦程度 -->
+            </div>
+            
+            <div class="form-group">
+                <label>推薦程度 <span class="required">*</span></label>
                 <div class="rating-container">
-                    <label>推薦程度 <span class="required">*</span></label>
                     <div class="rating-stars" id="ratingStars">
                         <span class="star" data-rating="1">★</span>
                         <span class="star" data-rating="2">★</span>
@@ -382,174 +312,180 @@
                         <span class="star" data-rating="4">★</span>
                         <span class="star" data-rating="5">★</span>
                     </div>
-                    <div class="rating-text" id="ratingText">請點擊星星評分</div>
-                    <input type="hidden" id="rating" name="rating" required>
+                    <div class="rating-text" id="ratingText">請點擊星星給予評分</div>
                 </div>
-
-                <!-- 備註 -->
-                <div class="form-group">
-                    <label for="note">備註</label>
-                    <textarea id="note" name="note" rows="3" 
-                             placeholder="例如：糖分可以再少一點，茶香味不足，下次要試試別的..."></textarea>
-                </div>
-
-                <button type="submit" class="submit-btn" id="submitBtn">
-                    <span id="submitText">記錄飲料</span>
-                </button>
-            </form>
-        </div>
-
-        <!-- 提交中畫面 -->
-        <div class="loading" id="submitLoading">
-            <div class="spinner"></div>
-            <p>記錄中，請稍候...</p>
-        </div>
+                <input type="hidden" id="rating" name="rating" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="note">備註</label>
+                <textarea id="note" name="note" rows="3" 
+                         placeholder="例如：糖分可以再少一點，茶香味不足..."></textarea>
+            </div>
+            
+            <button type="submit" class="submit-btn" id="submitBtn">
+                <span class="btn-text">記錄飲料</span>
+                <div class="loading" id="loading"></div>
+            </button>
+        </form>
     </div>
 
     <script>
         let liffUserId = null;
-        let isSubmitting = false;
-
+        let liffAccessToken = null;
+        
         // 評分文字對應
         const ratingTexts = {
             1: '😞 不推薦',
-            2: '😐 還好',
-            3: '😊 不錯',
-            4: '😍 很棒',
-            5: '🤩 超讚！必喝'
+            2: '😐 普通',
+            3: '🙂 還可以',
+            4: '😊 推薦',
+            5: '🤩 超推薦！'
         };
-
+        
         // 初始化 LIFF
+        window.addEventListener('load', () => {
+            initializeLIFF();
+            initializeForm();
+        });
+        
         async function initializeLIFF() {
             try {
+                // LIFF ID 已設定為專案使用的 ID
                 await liff.init({
-                    liffId: 'YOUR_LIFF_ID' // 需要替換為實際的 LIFF ID
+                    liffId: '2007638340-ljxe5LxY'
                 });
-
+                
                 if (liff.isLoggedIn()) {
                     const profile = await liff.getProfile();
                     liffUserId = profile.userId;
-                    console.log('User logged in:', profile.displayName);
+                    liffAccessToken = liff.getAccessToken();
+                    
+                    console.log('LIFF 初始化成功', profile.displayName);
+                    
+                    // 檢查 URL 參數，如果有預填資料則填入
+                    fillFormFromURLParams();
                 } else {
-                    liff.login();
-                    return;
+                    console.error('使用者未登入 LINE');
+                    showError('請先登入 LINE 帳號');
                 }
-
-                // 檢查 URL 參數預填
-                checkURLParams();
-                
-                // 顯示主表單
-                document.getElementById('initialLoading').classList.remove('show');
-                document.getElementById('mainForm').style.display = 'block';
-
             } catch (err) {
-                console.error('LIFF initialization failed', err);
-                showError('初始化失敗，請重新打開頁面');
+                console.error('LIFF 初始化失敗:', err);
+                showError('系統初始化失敗，請重新開啟');
             }
         }
-
-        // 檢查 URL 參數
-        function checkURLParams() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const shop = urlParams.get('shop');
-            const drink = urlParams.get('drink');
-
-            if (shop) {
-                document.getElementById('shopName').value = shop;
-            }
-            if (drink) {
-                document.getElementById('drinkName').value = drink;
-            }
-        }
-
-        // 設定店名
-        function setShopName(name) {
-            document.getElementById('shopName').value = name;
-            document.getElementById('shopName').focus();
-        }
-
-        // 星星評分功能
-        const stars = document.querySelectorAll('.star');
-        const ratingInput = document.getElementById('rating');
-        const ratingText = document.getElementById('ratingText');
-
-        stars.forEach(star => {
-            star.addEventListener('click', () => {
-                const rating = parseInt(star.dataset.rating);
-                ratingInput.value = rating;
-                
-                // 更新星星顯示
-                stars.forEach((s, index) => {
-                    if (index < rating) {
-                        s.classList.add('active');
-                    } else {
-                        s.classList.remove('active');
-                    }
+        
+        function initializeForm() {
+            // 糖度選擇
+            const sugarOptions = document.querySelectorAll('.sugar-option');
+            const sugarInput = document.getElementById('sugar');
+            
+            sugarOptions.forEach(option => {
+                option.addEventListener('click', () => {
+                    sugarOptions.forEach(opt => opt.classList.remove('selected'));
+                    option.classList.add('selected');
+                    sugarInput.value = option.dataset.value;
                 });
-
-                // 更新評分文字
-                ratingText.textContent = ratingTexts[rating];
             });
-
-            star.addEventListener('mouseover', () => {
-                const rating = parseInt(star.dataset.rating);
+            
+            // 星星評分
+            const stars = document.querySelectorAll('.star');
+            const ratingInput = document.getElementById('rating');
+            const ratingText = document.getElementById('ratingText');
+            
+            stars.forEach(star => {
+                star.addEventListener('click', () => {
+                    const rating = parseInt(star.dataset.rating);
+                    ratingInput.value = rating;
+                    
+                    stars.forEach((s, index) => {
+                        if (index < rating) {
+                            s.classList.add('active');
+                        } else {
+                            s.classList.remove('active');
+                        }
+                    });
+                    
+                    ratingText.textContent = ratingTexts[rating];
+                });
+                
+                star.addEventListener('mouseover', () => {
+                    const rating = parseInt(star.dataset.rating);
+                    stars.forEach((s, index) => {
+                        if (index < rating) {
+                            s.style.color = '#ffd700';
+                        } else {
+                            s.style.color = '#ddd';
+                        }
+                    });
+                });
+            });
+            
+            document.getElementById('ratingStars').addEventListener('mouseleave', () => {
+                const currentRating = parseInt(ratingInput.value) || 0;
                 stars.forEach((s, index) => {
-                    if (index < rating) {
+                    if (index < currentRating) {
                         s.style.color = '#ffd700';
                     } else {
                         s.style.color = '#ddd';
                     }
                 });
             });
-        });
-
-        // 糖度選擇功能
-        const sugarOptions = document.querySelectorAll('.sugar-option');
-        const sugarInput = document.getElementById('sugar');
-
-        sugarOptions.forEach(option => {
-            option.addEventListener('click', () => {
-                // 移除其他選中狀態
-                sugarOptions.forEach(opt => opt.classList.remove('selected'));
-                
-                // 選中當前選項
-                option.classList.add('selected');
-                sugarInput.value = option.dataset.sugar;
-            });
-        });
-
-        // 表單提交
-        document.getElementById('drinkForm').addEventListener('submit', async (e) => {
+            
+            // 表單提交
+            document.getElementById('drinkForm').addEventListener('submit', handleSubmit);
+        }
+        
+        function fillFormFromURLParams() {
+            const urlParams = new URLSearchParams(window.location.search);
+            
+            if (urlParams.get('shop')) {
+                document.getElementById('shopName').value = urlParams.get('shop');
+            }
+            
+            if (urlParams.get('drink')) {
+                document.getElementById('drinkName').value = urlParams.get('drink');
+            }
+        }
+        
+        async function handleSubmit(e) {
             e.preventDefault();
             
-            if (isSubmitting) return;
+            if (!liffUserId) {
+                showError('使用者資訊尚未載入，請稍後再試');
+                return;
+            }
+            
+            const submitBtn = document.getElementById('submitBtn');
+            const btnText = submitBtn.querySelector('.btn-text');
+            const loading = document.getElementById('loading');
+            
+            // 顯示載入狀態
+            submitBtn.disabled = true;
+            btnText.style.opacity = '0';
+            loading.style.display = 'block';
             
             try {
-                isSubmitting = true;
-                
-                // 顯示載入狀態
-                document.getElementById('mainForm').style.display = 'none';
-                document.getElementById('submitLoading').classList.add('show');
-                
-                // 收集表單資料
                 const formData = new FormData(e.target);
                 const drinkData = {
                     userId: liffUserId,
-                    shopName: formData.get('shopName'),
-                    drinkName: formData.get('drinkName'),
+                    shopName: formData.get('shopName').trim(),
+                    drinkName: formData.get('drinkName').trim(),
                     sugar: formData.get('sugar'),
                     price: formData.get('price'),
                     rating: formData.get('rating'),
-                    note: formData.get('note') || ''
+                    note: formData.get('note') ? formData.get('note').trim() : ''
                 };
-
-                // 驗證資料
-                if (!validateFormData(drinkData)) {
-                    throw new Error('請填寫所有必要欄位');
+                
+                // 驗證表單
+                const validation = validateForm(drinkData);
+                if (!validation.valid) {
+                    showError(validation.message);
+                    return;
                 }
-
-                // 發送到 Google Apps Script
-                const response = await fetch('YOUR_APPS_SCRIPT_URL', {
+                
+                // 發送資料到後端
+                const response = await fetch('YOUR_APPS_SCRIPT_WEB_APP_URL', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -559,111 +495,77 @@
                         data: drinkData
                     })
                 });
-
+                
                 const result = await response.json();
-
+                
                 if (result.success) {
                     showSuccess('記錄成功！感謝您的分享 🎉');
                     
                     // 延遲關閉視窗
                     setTimeout(() => {
-                        liff.closeWindow();
+                        if (liff.isInClient()) {
+                            liff.closeWindow();
+                        }
                     }, 2000);
                 } else {
-                    throw new Error(result.message || '記錄失敗');
+                    showError(result.message || '記錄失敗，請稍後再試');
                 }
-
             } catch (error) {
-                console.error('Error:', error);
-                showError(error.message || '發生錯誤，請稍後再試');
-                
-                // 恢復表單顯示
-                document.getElementById('submitLoading').classList.remove('show');
-                document.getElementById('mainForm').style.display = 'block';
-                
+                console.error('提交錯誤:', error);
+                showError('網路連接失敗，請檢查網路後重試');
             } finally {
-                isSubmitting = false;
+                // 恢復按鈕狀態
+                submitBtn.disabled = false;
+                btnText.style.opacity = '1';
+                loading.style.display = 'none';
             }
-        });
-
-        // 驗證表單資料
-        function validateFormData(data) {
-            const required = ['userId', 'shopName', 'drinkName', 'sugar', 'price', 'rating'];
-            
-            for (const field of required) {
-                if (!data[field]) {
-                    return false;
-                }
-            }
-
-            if (isNaN(data.price) || parseFloat(data.price) < 0) {
-                return false;
-            }
-
-            if (isNaN(data.rating) || data.rating < 1 || data.rating > 5) {
-                return false;
-            }
-
-            return true;
         }
-
-        // 顯示錯誤訊息
+        
+        function validateForm(data) {
+            if (!data.shopName) {
+                return { valid: false, message: '請輸入店名' };
+            }
+            
+            if (!data.drinkName) {
+                return { valid: false, message: '請輸入飲品名稱' };
+            }
+            
+            if (!data.sugar) {
+                return { valid: false, message: '請選擇糖度' };
+            }
+            
+            if (!data.price || isNaN(data.price) || data.price < 0 || data.price > 1000) {
+                return { valid: false, message: '請輸入正確的價格 (0-1000)' };
+            }
+            
+            if (!data.rating || isNaN(data.rating) || data.rating < 1 || data.rating > 5) {
+                return { valid: false, message: '請給予評分 (1-5星)' };
+            }
+            
+            return { valid: true, message: '驗證通過' };
+        }
+        
         function showError(message) {
             const errorDiv = document.getElementById('errorMessage');
+            const successDiv = document.getElementById('successMessage');
+            
+            successDiv.style.display = 'none';
             errorDiv.textContent = message;
             errorDiv.style.display = 'block';
             
-            // 滾動到頂部
-            window.scrollTo(0, 0);
-            
-            // 3秒後自動隱藏
             setTimeout(() => {
                 errorDiv.style.display = 'none';
             }, 5000);
         }
-
-        // 顯示成功訊息
+        
         function showSuccess(message) {
+            const errorDiv = document.getElementById('errorMessage');
             const successDiv = document.getElementById('successMessage');
+            
+            errorDiv.style.display = 'none';
             successDiv.textContent = message;
             successDiv.style.display = 'block';
-            
-            // 隱藏表單
-            document.getElementById('submitLoading').classList.remove('show');
-            document.getElementById('mainForm').style.display = 'block';
-            
-            // 滾動到頂部
-            window.scrollTo(0, 0);
         }
-
-        // 重置星星鼠標離開效果
-        document.getElementById('ratingStars').addEventListener('mouseleave', () => {
-            const currentRating = parseInt(ratingInput.value) || 0;
-            stars.forEach((star, index) => {
-                if (index < currentRating) {
-                    star.style.color = '#ffd700';
-                } else {
-                    star.style.color = '#ddd';
-                }
-            });
-        });
-
-        // 頁面載入完成後初始化
-        document.addEventListener('DOMContentLoaded', () => {
-            // 顯示初始載入畫面
-            document.getElementById('initialLoading').classList.add('show');
-            
-            // 初始化 LIFF
-            initializeLIFF();
-        });
-
-        // 預防意外離開
-        window.addEventListener('beforeunload', (e) => {
-            if (isSubmitting) {
-                e.preventDefault();
-                e.returnValue = '資料正在送出中，確定要離開嗎？';
-            }
-        });
     </script>
 </body>
 </html>
