@@ -353,7 +353,7 @@
             try {
                 // LIFF ID 已設定為專案使用的 ID
                 await liff.init({
-                    liffId: '2007638340-ljxe5LxY'
+                    liffId: '2007638340-ljxe5LxY' // 取得登入的userID
                 });
                 
                 if (liff.isLoggedIn()) {
@@ -484,8 +484,9 @@
                     return;
                 }
                 
-                // 發送資料到後端
-                const response = await fetch('YOUR_APPS_SCRIPT_WEB_APP_URL', {
+                // 發送資料到後端 - 使用動態獲取的 Web App URL
+                const webAppUrl = 'https://script.google.com/macros/s/AKfycbwLjNpvHWZ5CnKUGZPORdGBhk1d6W0VGp3oGr-NOHHE3q7M_R55H5Kl1BpG3JwZZYuW/exec';
+                const response = await fetch(webAppUrl, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
